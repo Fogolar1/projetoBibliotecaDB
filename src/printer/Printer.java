@@ -2,6 +2,7 @@ package printer;
 
 import bean.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Objects;
 
@@ -10,6 +11,8 @@ import java.util.Objects;
 public class Printer {
 
     private static int tableLength = 0;
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
 
     public static void printObject(Object bean){
         StringBuilder resultado = new StringBuilder();
@@ -99,8 +102,8 @@ public class Printer {
     public static String printLocacoes(LocacoesBean lb){
         return PrinterUtils.adicionarPadding(lb.getIdLocador() + " | " +
                 lb.getIdLivro() + " | " +
-                lb.getDataInicio() + " | " +
-                lb.getDataFim());
+                lb.getDataInicio().format(formatter) + " | " +
+                lb.getDataFim().format(formatter));
     }
 
 }

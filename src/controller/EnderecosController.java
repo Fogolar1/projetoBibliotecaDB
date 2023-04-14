@@ -17,12 +17,13 @@ public class EnderecosController extends Controller{
         System.out.println("Adição de Endereço : ");
         System.out.print("Id : ");
         int id = scanner.nextInt();
+        scanner.nextLine(); //resolve problemas de buffer
         System.out.print("Cidade : ");
-        String cidade = scanner.next();
+        String cidade = scanner.nextLine();
         System.out.print("Bairro : ");
-        String bairro = scanner.next();
+        String bairro = scanner.nextLine();
         System.out.print("Logradouro : ");
-        String logradouro = scanner.next();
+        String logradouro = scanner.nextLine();
         System.out.print("Numero : ");
         int numero = scanner.nextInt();
         EnderecosBean eb = new EnderecosBean(id,bairro, cidade, logradouro, numero);

@@ -3,6 +3,7 @@ package model;
 import bean.LocacoesBean;
 import java.sql.*;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
 
 public class LocacoesModel extends Model {
@@ -10,11 +11,11 @@ public class LocacoesModel extends Model {
     public void insert(Connection con, Object b) throws SQLException {
         LocacoesBean lb = (LocacoesBean) b;
         PreparedStatement st;
-        st = con.prepareStatement("INSERT INTO locacoes VALUES(idLivro, idLocador, dataInicio, dataFim) VALUES (?,?,?,?)");
+        st = con.prepareStatement("INSERT INTO locacoes(idLivro, idLocador, dataInicio, dataFim) VALUES (?,?,?,?)");
         st.setInt(1, lb.getIdLivro());
         st.setInt(2, lb.getIdLocador());
-        st.setDate(3, (Date) lb.getDataInicio());
-        st.setDate(4, (Date) lb.getDataFim());
+        st.setObject(3, lb.getDataInicio());
+        st.setObject(4, lb.getDataFim());
         st.execute();
         st.close();
     }
@@ -41,8 +42,8 @@ public class LocacoesModel extends Model {
         String sql = "SELECT idlivro, idlocador, dataInicio, dataFim FROM locacoes";
         ResultSet result = st.executeQuery(sql);
         while(result.next()){
-            hashList.add(new LocacoesBean(result.getInt(1), result.getInt(2), result.getDate(3),
-                    result.getDate(4)));
+            hashList.add(new LocacoesBean(result.getInt(1), result.getInt(2), ((Date) result.getObject(3)).toLocalDate(),
+                    ((Date) result.getObject(4)).toLocalDate()));
         }
         return hashList;
     }
@@ -54,7 +55,7 @@ public class LocacoesModel extends Model {
         st.setInt(1,id);
         ResultSet result = st.executeQuery();
         result.next();
-        return new LocacoesBean(result.getInt(1), result.getInt(2), result.getDate(3),
-                result.getDate(4));
+        return new LocacoesBean(result.getInt(1), result.getInt(2),(LocalDate) result.getObject(3),
+                (LocalDate) result.getObject(4));
     }
 }

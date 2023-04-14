@@ -72,7 +72,8 @@ public abstract class Controller {
         do {
             String nomeCampo = this.manipularAtualizacao();
             System.out.println("Digite o novo valor desejado para o campo");
-            String novoValor = scanner.next();
+            scanner.nextLine(); //resolve problemas de buffer
+            String novoValor = scanner.nextLine();
             campos.remove(nomeCampo);
             campos.put(nomeCampo, novoValor);
             System.out.println("Deseja editar mais algum campo do registro " + id + "? \n Digite 1 para editar outro campo");
@@ -80,6 +81,7 @@ public abstract class Controller {
         }while (continuar == 1);
 
         this.model.update(con, id, campos);
+        System.out.println("Registro alterado com sucesso!");
     }
 
 

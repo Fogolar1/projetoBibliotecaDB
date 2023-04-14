@@ -17,12 +17,13 @@ public class LocadoresController extends Controller{
         System.out.println("Adição de Locador : ");
         System.out.print("Id : ");
         int id = scanner.nextInt();
+        scanner.nextLine(); //resolve problemas de buffer
         System.out.print("Nome : ");
-        String nome = scanner.next();
+        String nome = scanner.nextLine();
+        System.out.print("Email : ");
+        String email = scanner.nextLine();
         System.out.print("Telefone : ");
         int telefone = scanner.nextInt();
-        System.out.print("Email : ");
-        String email = scanner.next();
         System.out.print("Id do Endereco : ");
         int idEndereco = scanner.nextInt();
         LocadoresBean lb = new LocadoresBean(id, nome, telefone, email, idEndereco);

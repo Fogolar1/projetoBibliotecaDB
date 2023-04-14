@@ -4,9 +4,8 @@ import bean.LocacoesBean;
 import model.LocacoesModel;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class LocacoesController extends Controller {
@@ -17,27 +16,21 @@ public class LocacoesController extends Controller {
     @Override
     public void adicionar(Connection con) throws SQLException {
         Scanner scanner = new Scanner(System.in);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
         System.out.println("Adição de Locação : ");
         System.out.print("Id do Livro : ");
         int idLivro = scanner.nextInt();
         System.out.print("Id do Locador : ");
         int idLocador = scanner.nextInt();
+        scanner.nextLine();
         System.out.println("Exemplo de inserção de data : 20/07/2023");
         System.out.print("Data de início da locação : ");
         String dataInicioStr = scanner.nextLine();
         System.out.print("Data final da locação : ");
         String dataFimStr = scanner.nextLine();
 
-        Date dataInicio;
-        Date dataFim;
-
-        try{
-            dataInicio = sdf.parse(dataInicioStr);
-            dataFim = sdf.parse(dataFimStr);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
+        LocalDate dataInicio = LocalDate.parse(dataInicioStr, formatter);
+        LocalDate dataFim = LocalDate.parse(dataFimStr, formatter);
 
         LocacoesBean lb = new LocacoesBean(idLivro, idLocador, dataInicio,dataFim);
         model.insert(con,lb);

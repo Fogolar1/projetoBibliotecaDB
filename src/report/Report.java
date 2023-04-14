@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.HashSet;
 
 public class Report {
@@ -32,7 +33,7 @@ public class Report {
                 " INNER JOIN locadores loc ON loc.id = lo.idlocador";
         ResultSet result = st.executeQuery(sql);
         while(result.next()) {
-            LocacoesBean locacoesBean = new LocacoesBean(result.getInt(3), result.getInt(5), result.getDate(1), result.getDate(2));
+            LocacoesBean locacoesBean = new LocacoesBean(result.getInt(3), result.getInt(5),(LocalDate) result.getObject(1),(LocalDate) result.getObject(2));
             LivrosBean livrosBean = new LivrosBean(result.getInt(3), result.getString(4), result.getInt(5), result.getInt(6));
             LocadoresBean locadoresBean = new LocadoresBean(result.getInt(7), result.getString(8),
                     result.getInt(9), result.getString(10), result.getInt(11));

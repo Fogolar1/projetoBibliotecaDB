@@ -1,16 +1,16 @@
 package bean;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class LocacoesBean {
     private final int idLivro;
     private final int idLocador;
-    private final Date dataInicio;
-    private final Date dataFim;
+    private final LocalDate dataInicio;
+    private final LocalDate dataFim;
     private  LivrosBean livros;
     private LocadoresBean locadores;
 
-    public LocacoesBean(int idLivro, int idLocador, Date dataInicio, Date dataFim) {
+    public LocacoesBean(int idLivro, int idLocador, LocalDate dataInicio, LocalDate dataFim) {
         this.idLivro = idLivro;
         this.idLocador = idLocador;
         this.dataInicio = dataInicio;
@@ -33,11 +33,11 @@ public class LocacoesBean {
         this.locadores = locador;
     }
 
-    public Date getDataInicio() {
+    public LocalDate getDataInicio() {
         return dataInicio;
     }
 
-    public Date getDataFim() {
+    public LocalDate getDataFim() {
         return dataFim;
     }
 

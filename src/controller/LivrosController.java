@@ -37,7 +37,6 @@ public class LivrosController extends Controller {
         System.out.println("2 - Id da Categoria");
         System.out.println("3 - Id do Autor");
         int campo = scanner.nextInt();
-
         return encontraNomeCampo(campo);
     }
 
