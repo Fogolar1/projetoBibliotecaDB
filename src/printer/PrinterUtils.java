@@ -24,6 +24,8 @@ public class PrinterUtils {
     }
 
     public static Object encontraValor(Field field, Object context) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if(context.getClass() != field.getDeclaringClass())
+            return null;
         Method getter = context.getClass().getMethod("get" + primeiraLetraMaiuscula(field.getName()));
         return getter.invoke(context);
     }
