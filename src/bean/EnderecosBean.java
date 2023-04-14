@@ -2,8 +2,8 @@ package bean;
 
 public class EnderecosBean {
     private int id;
-    private final String bairro;
     private final String cidade;
+    private final String bairro;
     private final String logradouro;
     private final int numero;
 

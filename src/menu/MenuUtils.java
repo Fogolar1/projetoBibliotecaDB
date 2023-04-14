@@ -1,9 +1,8 @@
 package menu;
 
 import controller.*;
+import printer.Printer;
 import report.Report;
-import util.PrinterUtils;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -87,14 +86,12 @@ public class MenuUtils {
                 relatorio = Report.relatorioLocadoresEndereco(con);
                 break;
         }
-        resolvePrintRelatorio(relatorio);
+        mostraRelatorio(relatorio);
     }
 
-    public static void resolvePrintRelatorio(HashSet<Object> relatorio){
-        PrinterUtils.printHeader(relatorio.iterator().next());
-        for(Object bean : relatorio){
-            PrinterUtils.printObject(bean);
-        }
+    public static void mostraRelatorio(HashSet<Object> relatorio){
+        Printer.printHeader(relatorio.iterator().next());
+        Printer.printList(relatorio);
     }
 
     public static void manipulaOperacaoMenu(int tabela, int op, Connection con){

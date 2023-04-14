@@ -1,7 +1,7 @@
 package controller;
 
 import model.Model;
-import util.PrinterUtils;
+import printer.Printer;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -45,15 +45,13 @@ public abstract class Controller {
         System.out.println("Insira o id que deseja selecionar : ");
         int id = scanner.nextInt();
         Object bean = this.model.select(con, id);
-        PrinterUtils.printObject(bean);
+        Printer.printObject(bean);
     }
 
     public void listarTodos(Connection con) throws SQLException {
         HashSet<Object> hash = this.model.selectAll(con);
-        PrinterUtils.printHeader(hash.iterator().next());
-        for(Object bean : hash){
-            PrinterUtils.printObject(bean);
-        }
+        Printer.printHeader(hash.iterator().next());
+        Printer.printList(hash);
     }
 
     public void deletar(Connection con) throws SQLException{

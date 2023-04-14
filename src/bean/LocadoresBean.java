@@ -3,10 +3,10 @@ package bean;
 public class LocadoresBean {
     private int id;
     private String nome;
-    private final int telefone;
     private final String email;
-    private EnderecosBean endereco;
+    private final int telefone;
     private final int idEndereco;
+    private EnderecosBean endereco;
 
     public LocadoresBean(int id, String nome, int telefone, String email, int idEndereco) {
         this.id = id;

@@ -5,8 +5,8 @@ public class LivrosBean {
     private String nome;
     private final int idCategoria;
     private final int idAutor;
-    private AutoresBean autor;
-    private CategoriasBean categorias;
+    public AutoresBean autor;
+    public CategoriasBean categorias;
 
     public LivrosBean(int id, String nome, int idCategoria, int idAutor) {
         this.id = id;
