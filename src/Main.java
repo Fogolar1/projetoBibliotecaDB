@@ -12,7 +12,7 @@ public class Main {
             continuar = MenuUtils.menuPrincipal(con);
         }
         while (continuar);
+
+        c.closeConnection();
     }
-
-
 }
