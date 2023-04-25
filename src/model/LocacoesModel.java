@@ -3,7 +3,6 @@ package model;
 import bean.LocacoesBean;
 import java.sql.*;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.*;
 
 public class LocacoesModel extends Model {
@@ -11,11 +10,12 @@ public class LocacoesModel extends Model {
     public void insert(Connection con, Object b) throws SQLException {
         LocacoesBean lb = (LocacoesBean) b;
         PreparedStatement st;
-        st = con.prepareStatement("INSERT INTO locacoes(idLivro, idLocador, dataInicio, dataFim) VALUES (?,?,?,?)");
-        st.setInt(1, lb.getIdLivro());
-        st.setInt(2, lb.getIdLocador());
-        st.setObject(3, lb.getDataInicio());
-        st.setObject(4, lb.getDataFim());
+        st = con.prepareStatement("INSERT INTO locacoes(id, idLivro, idLocador, dataInicio, dataFim) VALUES (?,?,?,?,?)");
+        st.setInt(1, lb.getId());
+        st.setInt(2, lb.getIdLivro());
+        st.setInt(3, lb.getIdLocador());
+        st.setObject(4, lb.getDataInicio());
+        st.setObject(5, lb.getDataFim());
         st.execute();
         st.close();
     }
@@ -39,11 +39,11 @@ public class LocacoesModel extends Model {
         Statement st;
         HashSet<Object>  hashList = new HashSet<>();
         st = con.createStatement();
-        String sql = "SELECT idlivro, idlocador, dataInicio, dataFim FROM locacoes";
+        String sql = "SELECT id, idlivro, idlocador, dataInicio, dataFim FROM locacoes ORDER BY id DESC";
         ResultSet result = st.executeQuery(sql);
         while(result.next()){
-            hashList.add(new LocacoesBean(result.getInt(1), result.getInt(2), ((Date) result.getObject(3)).toLocalDate(),
-                    ((Date) result.getObject(4)).toLocalDate()));
+            hashList.add(new LocacoesBean(result.getInt(1), result.getInt(2), result.getInt(3), ((Date) result.getObject(4)).toLocalDate(),
+                    ((Date) result.getObject(5)).toLocalDate()));
         }
         return hashList;
     }
@@ -51,11 +51,11 @@ public class LocacoesModel extends Model {
     @Override
     public Object select(Connection con, int id) throws SQLException {
         PreparedStatement st;
-        st = con.prepareStatement("SELECT idlivro, idlocador, dataInicio, dataFim FROM locacoes WHERE id = ?");
+        st = con.prepareStatement("SELECT id, idlivro, idlocador, dataInicio, dataFim FROM locacoes WHERE id = ? ORDER BY id DESC");
         st.setInt(1,id);
         ResultSet result = st.executeQuery();
         result.next();
-        return new LocacoesBean(result.getInt(1), result.getInt(2),(LocalDate) result.getObject(3),
-                (LocalDate) result.getObject(4));
+        return new LocacoesBean(result.getInt(1), result.getInt(2), result.getInt(3),((Date) result.getObject(4)).toLocalDate(),
+                ((Date) result.getObject(5)).toLocalDate());
     }
 }

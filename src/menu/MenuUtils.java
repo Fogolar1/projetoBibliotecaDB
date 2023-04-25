@@ -3,12 +3,18 @@ package menu;
 import controller.*;
 import printer.Printer;
 import report.Report;
+
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Scanner;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MenuUtils {
+
+    private static final String[] controllers = {"Livros", "Autores", "Categorias", "Locadores", "Enderecos", "Locacoes"};
+
+    private static final Scanner scanner = new Scanner(System.in);
 
     public static boolean menuPrincipal(Connection con){
         int op = MenuUtils.menuOperacao();
@@ -45,7 +51,6 @@ public class MenuUtils {
         System.out.println("2 - Editar Valor");
         System.out.println("3 - Deletar Valor");
         System.out.println("4 - Relatórios");
-        Scanner scanner = new Scanner((System.in));
         return scanner.nextInt();
     }
 
@@ -57,8 +62,18 @@ public class MenuUtils {
         System.out.println("4 - Locadores");
         System.out.println("5 - Endereços");
         System.out.println("6 - Locações");
-        Scanner scanner = new Scanner((System.in));
         return scanner.nextInt();
+    }
+
+    public static void manipulaOperacaoMenu(int tabela, int op, Connection con){
+        try{
+            Controller controller = (Controller) Class.forName("controller." + controllers[tabela - 1] + "Controller").getConstructor().newInstance();
+            controller.manipulaOperacao(op, con);
+        }catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                InvocationTargetException e){
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     public static int menuRelatorio(){
@@ -68,7 +83,6 @@ public class MenuUtils {
         System.out.println("3 - Relatórios de livro por categoria e autor");
         System.out.println("4 - Relatório de locações por livro");
         System.out.println("5 - Relatório de locadores por endereço");
-        Scanner scanner = new Scanner(System.in);
         return scanner.nextInt();
     }
 
@@ -94,29 +108,34 @@ public class MenuUtils {
         Printer.printList(relatorio);
     }
 
-    public static void manipulaOperacaoMenu(int tabela, int op, Connection con){
-        switch (tabela) {
-            case 1:
-                (new LivrosController()).manipulaOperacao(op, con);
-                break;
-            case 2:
-                (new AutoresController()).manipulaOperacao(op, con);
-                break;
-            case 3:
-                (new CategoriasController()).manipulaOperacao(op, con);
-                break;
-            case 4:
-                (new LocadoresController()).manipulaOperacao(op, con);
-                break;
-            case 5:
-                (new EnderecosController()).manipulaOperacao(op, con);
-                break;
-            case 6:
-                (new LocacoesController()).manipulaOperacao(op, con);
-                break;
-            default:
-                throw new RuntimeException("Tabela inválida");
-        }
+    public static ArrayList<Object> mostraCamposAdicionar(LinkedHashMap<String, Integer> campos){
+        scanner.nextLine();
+        ArrayList<Object> lista = new ArrayList<>();
+        campos.forEach((campo, tipo) -> {
+            System.out.println(campo + " :");
+            switch (tipo){
+                case 1 :
+                    lista.add(scanner.nextInt());
+                    scanner.nextLine(); //resolver buffer
+                    break;
+                case 2 :
+                    lista.add(scanner.nextLine());
+                    break;
+            }
+        });
+        return lista;
     }
 
+    public static Integer mostraCamposAtualizar(LinkedHashMap<String, Integer> campos){
+        AtomicInteger i = new AtomicInteger();
+        System.out.println("Digite o número do campo que você gostaria de atualizar");
+        campos.forEach((campo, tipo) -> {
+            if(!campo.equalsIgnoreCase("id")){
+                i.getAndIncrement();
+                System.out.println(i + " - " + campo);
+            }
+        });
+
+        return scanner.nextInt();
+    }
 }

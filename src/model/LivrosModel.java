@@ -38,7 +38,7 @@ public class LivrosModel extends Model{
         Statement st;
         HashSet<Object>  hashList = new HashSet<>();
         st = con.createStatement();
-        String sql = "SELECT id, nome, idCategoria, idAutor FROM livros";
+        String sql = "SELECT id, nome, idCategoria, idAutor FROM livros ORDER BY id DESC";
         ResultSet result = st.executeQuery(sql);
         while(result.next()){
             hashList.add(new LivrosBean(result.getInt(1), result.getString(2), result.getInt(3), result.getInt(4)));
@@ -49,7 +49,7 @@ public class LivrosModel extends Model{
     @Override
     public Object select(Connection con, int id) throws SQLException {
         PreparedStatement st;
-        st = con.prepareStatement("SELECT id, nome, idCategoria, idAutor FROM livros WHERE id = ?");
+        st = con.prepareStatement("SELECT id, nome, idCategoria, idAutor FROM livros WHERE id = ? ORDER BY id DESC");
         st.setInt(1,id);
         ResultSet result = st.executeQuery();
         result.next();

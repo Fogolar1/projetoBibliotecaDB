@@ -38,11 +38,11 @@ public class LocadoresModel extends Model{
         Statement st;
         HashSet<Object>  hashList = new HashSet<>();
         st = con.createStatement();
-        String sql = "SELECT id, nome, telefone, email, idEndereco FROM locadores";
+        String sql = "SELECT id, nome, email, telefone, idEndereco FROM locadores ORDER BY id DESC";
         ResultSet result = st.executeQuery(sql);
         while(result.next()){
-            hashList.add(new LocadoresBean(result.getInt(1), result.getString(2), result.getInt(3),
-                    result.getString(4),result.getInt(5)));
+            hashList.add(new LocadoresBean(result.getInt(1), result.getString(2), result.getString(3),
+                    result.getInt(4),result.getInt(5)));
         }
         return hashList;
     }
@@ -50,11 +50,11 @@ public class LocadoresModel extends Model{
     @Override
     public Object select(Connection con, int id) throws SQLException{
         PreparedStatement st;
-        st = con.prepareStatement("SELECT id, nome, telefone, email, idEndereco FROM locadores WHERE id = ?");
+        st = con.prepareStatement("SELECT id, nome, email, telefone, idEndereco FROM locadores WHERE id = ? ORDER BY id DESC");
         st.setInt(1,id);
         ResultSet result = st.executeQuery();
         result.next();
-        return new LocadoresBean(result.getInt(1), result.getString(2), result.getInt(3),
-                result.getString(4), result.getInt(5));
+        return new LocadoresBean(result.getInt(1), result.getString(2), result.getString(3),
+                result.getInt(4), result.getInt(5));
     }
 }

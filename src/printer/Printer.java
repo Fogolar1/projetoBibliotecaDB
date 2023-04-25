@@ -29,8 +29,8 @@ public class Printer {
             LivrosBean lb = (LivrosBean) bean;
             resultado.append(printLivros(lb));
             if(Objects.nonNull(lb.getCategorias()) && Objects.nonNull(lb.getAutor()) ){
-                resultado.append(" | ").append(printCategoria(lb.getCategorias())).
-                        append(" | ").append(printAutor(lb.getAutor()));
+                resultado.append(printCategoria(lb.getCategorias()))
+                        .append(printAutor(lb.getAutor()));
             }
         }else if(bean instanceof LocadoresBean){
             LocadoresBean lb = (LocadoresBean) bean;
@@ -100,7 +100,8 @@ public class Printer {
     }
 
     public static String printLocacoes(LocacoesBean lb){
-        return PrinterUtils.adicionarPadding(lb.getIdLocador() + " | " +
+        return PrinterUtils.adicionarPadding(lb.getId() + " | " +
+                lb.getIdLocador() + " | " +
                 lb.getIdLivro() + " | " +
                 lb.getDataInicio().format(formatter) + " | " +
                 lb.getDataFim().format(formatter));

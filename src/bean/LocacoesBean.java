@@ -3,6 +3,8 @@ package bean;
 import java.time.LocalDate;
 
 public class LocacoesBean {
+
+    private final int id;
     private final int idLivro;
     private final int idLocador;
     private final LocalDate dataInicio;
@@ -10,11 +12,16 @@ public class LocacoesBean {
     private  LivrosBean livros;
     private LocadoresBean locadores;
 
-    public LocacoesBean(int idLivro, int idLocador, LocalDate dataInicio, LocalDate dataFim) {
+    public LocacoesBean(int id, int idLivro, int idLocador, LocalDate dataInicio, LocalDate dataFim) {
+        this.id = id;
         this.idLivro = idLivro;
         this.idLocador = idLocador;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public void setLivros(LivrosBean livros) {

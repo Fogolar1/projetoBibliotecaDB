@@ -8,11 +8,11 @@ public class LocadoresBean {
     private final int idEndereco;
     private EnderecosBean endereco;
 
-    public LocadoresBean(int id, String nome, int telefone, String email, int idEndereco) {
+    public LocadoresBean(int id, String nome, String email, int telefone, int idEndereco) {
         this.id = id;
         this.nome = nome;
-        this.telefone = telefone;
         this.email = email;
+        this.telefone = telefone;
         this.idEndereco = idEndereco;
     }
 
@@ -32,12 +32,16 @@ public class LocadoresBean {
         this.nome = nome;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
     public int getTelefone() {
         return telefone;
     }
 
-    public String getEmail() {
-        return email;
+    public int getIdEndereco() {
+        return idEndereco;
     }
 
     public EnderecosBean getEndereco() {
@@ -47,9 +51,4 @@ public class LocadoresBean {
     public void setEndereco(EnderecosBean endereco) {
         this.endereco = endereco;
     }
-
-    public int getIdEndereco() {
-        return idEndereco;
-    }
-
 }

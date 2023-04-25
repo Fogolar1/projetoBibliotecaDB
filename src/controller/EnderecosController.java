@@ -1,61 +1,33 @@
 package controller;
 
 import bean.EnderecosBean;
+import menu.MenuUtils;
 import model.EnderecosModel;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class EnderecosController extends Controller{
     public EnderecosController(){
         this.model = new EnderecosModel();
+        this.campos = new LinkedHashMap<>();
+        this.campos.put("Id", 1);
+        this.campos.put("Cidade", 2);
+        this.campos.put("Bairro", 2);
+        this.campos.put("Logradouro", 2);
+        this.campos.put("Numero", 1);
     }
+
     @Override
     public void adicionar(Connection con) throws SQLException {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Adição de Endereço : ");
-        System.out.print("Id : ");
-        int id = scanner.nextInt();
-        scanner.nextLine(); //resolve problemas de buffer
-        System.out.print("Cidade : ");
-        String cidade = scanner.nextLine();
-        System.out.print("Bairro : ");
-        String bairro = scanner.nextLine();
-        System.out.print("Logradouro : ");
-        String logradouro = scanner.nextLine();
-        System.out.print("Numero : ");
-        int numero = scanner.nextInt();
-        EnderecosBean eb = new EnderecosBean(id,bairro, cidade, logradouro, numero);
+        ArrayList<Object> valores = MenuUtils.mostraCamposAdicionar(campos);
+        EnderecosBean eb = new EnderecosBean((Integer) valores.get(0),(String) valores.get(1),(String) valores.get(2),(String) valores.get(3),(Integer) valores.get(4));
         model.insert(con,eb);
         System.out.println("Endereço adicionado com sucesso");
     }
 
-    @Override
-    public String manipularAtualizacao(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Digite o número do campo que você gostaria de atualizar");
-        System.out.println("1 - Cidade");
-        System.out.println("2 - Bairro");
-        System.out.println("3 - Logradouro");
-        System.out.println("4 - Numero");
-        int campo = scanner.nextInt();
 
-        return encontraNomeCampo(campo);
-    }
-
-    public String encontraNomeCampo(int campoNumero){
-        switch (campoNumero){
-            case 1 :
-                return "cidade";
-            case 2 :
-                return "bairro";
-            case 3 :
-                return "logradouro";
-            case 4 :
-                return "numero";
-            default:
-                throw new RuntimeException("Campo Inválido");
-        }
-    }
 }

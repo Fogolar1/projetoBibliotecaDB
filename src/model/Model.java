@@ -3,6 +3,7 @@ package model;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.*;
 
 public abstract class Model {
@@ -13,9 +14,9 @@ public abstract class Model {
         int i = 0;
         for (Map.Entry<String, Object> entry : campos.entrySet()) {
             if(i != 0){
-                string.append(" AND ");
+                string.append(" , ");
             }
-            String campo = entry.getKey();
+            String campo = entry.getKey().replaceAll("\\s", "");
             Object valor = entry.getValue();
             valores.add(valor);
             string.append(campo).append(" = ? ");
@@ -31,8 +32,8 @@ public abstract class Model {
                 st.setString(i, (String) obj);
             }else if(obj instanceof Integer) {
                 st.setInt(i, (Integer) obj );
-            }else if(obj instanceof Date){
-                st.setDate(i, (java.sql.Date) obj);
+            }else if(obj instanceof LocalDate){
+                st.setObject(i, obj);
             }else{
                 throw new RuntimeException("Este valor não pode ser adicionado a esse campo");
             }

@@ -2,6 +2,7 @@ package bean;
 
 public class AutoresBean{
     private int id;
+    private String nome;
 
     public AutoresBean(int id, String nome){
         this.id = id;
@@ -15,8 +16,6 @@ public class AutoresBean{
     public void setId(int id) {
         this.id = id;
     }
-
-    private String nome;
 
     public String getNome() {
         return nome;

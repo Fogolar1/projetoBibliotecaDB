@@ -1,55 +1,30 @@
 package controller;
 
 import bean.LivrosBean;
+import menu.MenuUtils;
 import model.LivrosModel;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 public class LivrosController extends Controller {
     public LivrosController(){
         this.model = new LivrosModel();
+        this.campos = new LinkedHashMap<>();
+        this.campos.put("Id", 1);
+        this.campos.put("Nome", 2);
+        this.campos.put("Id Categoria", 1);
+        this.campos.put("Id Autor", 1);
     }
     @Override
     public void adicionar(Connection con) throws SQLException {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Adição de Livro : ");
-        System.out.print("Id : ");
-        int id = scanner.nextInt();
-        System.out.print("Nome : ");
-        String nome = scanner.next();
-        System.out.print("Id da Categoria : ");
-        int idCategoria = scanner.nextInt();
-        System.out.print("Id do Autor : ");
-        int idAutor = scanner.nextInt();
-        LivrosBean lb = new LivrosBean(id,nome, idCategoria, idAutor);
+        ArrayList<Object> valores = MenuUtils.mostraCamposAdicionar(campos);
+        LivrosBean lb = new LivrosBean((Integer) valores.get(0),(String) valores.get(1),(Integer) valores.get(2),(Integer) valores.get(3));
         model.insert(con,lb);
-
         System.out.println("Livro adicionado com sucesso");
     }
 
-    @Override
-    public String manipularAtualizacao(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Digite o número do campo que você gostaria de atualizar");
-        System.out.println("1 - Nome");
-        System.out.println("2 - Id da Categoria");
-        System.out.println("3 - Id do Autor");
-        int campo = scanner.nextInt();
-        return encontraNomeCampo(campo);
-    }
-
-    public String encontraNomeCampo(int campoNumero){
-        switch (campoNumero){
-            case 1 :
-                return "nome";
-            case 2 :
-                return "idcategoria";
-            case 3 :
-                return "idautor";
-            default:
-                throw new RuntimeException("Campo Inválido");
-        }
-    }
 }

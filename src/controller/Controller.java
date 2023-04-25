@@ -1,79 +1,60 @@
 package controller;
 
+import menu.MenuUtils;
 import model.Model;
 import printer.Printer;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public abstract class Controller {
-
     Model model;
+
+    LinkedHashMap<String, Integer> campos;
+    protected final Scanner scanner = new Scanner(System.in);
+    private final String[] methods = {"adicionar", "atualizar", "deletar", "listarTodos", "listar"};
 
     public void manipulaOperacao(int op, Connection con) {
         try{
-            switch (op){
-                case 1:
-                    adicionar(con);
-                    break;
-                case 2:
-                    atualizar(con);
-                    break;
-                case 3:
-                    deletar(con);
-                    break;
-                case 4:
-                    listarTodos(con);
-                    break;
-                case 5:
-                    listar(con);
-                    break;
-            }
-        }catch(SQLException | IllegalAccessException e){
+            this.getClass().getSuperclass().getMethod(methods[op - 1], Connection.class).invoke(this, con);
+        }catch(IllegalAccessException | NoSuchMethodException | InvocationTargetException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
 
     }
 
-    public abstract  void adicionar(Connection con) throws SQLException;
-
-    public void listar(Connection con) throws SQLException, IllegalAccessException {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Insira o id que deseja selecionar : ");
-        int id = scanner.nextInt();
-        Object bean = this.model.select(con, id);
-        Printer.printObject(bean);
-    }
-
-    public void listarTodos(Connection con) throws SQLException {
-        HashSet<Object> hash = this.model.selectAll(con);
-        Printer.printHeader(hash.iterator().next());
-        Printer.printList(hash);
-    }
-
-    public void deletar(Connection con) throws SQLException{
-        listarTodos(con);
-        System.out.println("Qual id você gostaria de remover?");
-        Scanner scanner = new Scanner(System.in);
-        int id = scanner.nextInt();
-        this.model.delete(con, id);
-    }
+    public abstract void adicionar(Connection con) throws SQLException;
 
     public void atualizar(Connection con) throws SQLException{
         listarTodos(con);
         HashMap<String, Object> campos = new HashMap<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
         System.out.println("Qual id você gostaria de atualizar?");
-        Scanner scanner = new Scanner(System.in);
         int id = scanner.nextInt();
         int continuar;
         do {
             String nomeCampo = this.manipularAtualizacao();
+            int tipoDoCampo =  this.campos.get(nomeCampo);
+            Object novoValor = null;
             System.out.println("Digite o novo valor desejado para o campo");
             scanner.nextLine(); //resolve problemas de buffer
-            String novoValor = scanner.nextLine();
+            switch (tipoDoCampo){
+                case 1 :
+                    novoValor = scanner.nextInt();
+                    scanner.nextLine(); //resolver buffer
+                    break;
+                case 2 :
+                    novoValor = scanner.nextLine();
+                    break;
+            }
+            if(nomeCampo.contains("Data") && Objects.nonNull(novoValor) && novoValor instanceof String){
+                novoValor = LocalDate.parse((String) novoValor, formatter);
+            }
+
             campos.remove(nomeCampo);
             campos.put(nomeCampo, novoValor);
             System.out.println("Deseja editar mais algum campo do registro " + id + "? \n Digite 1 para editar outro campo");
@@ -84,6 +65,26 @@ public abstract class Controller {
         System.out.println("Registro alterado com sucesso!");
     }
 
+    public void deletar(Connection con) throws SQLException{
+        listarTodos(con);
+        System.out.println("Qual id você gostaria de remover?");
+        int id = scanner.nextInt();
+        this.model.delete(con, id);
+        System.out.println("Deletado com sucesso!");
+    }
+    public void listarTodos(Connection con) throws SQLException {
+        HashSet<Object> hash = this.model.selectAll(con);
+        Printer.printHeader(hash.iterator().next());
+        Printer.printList(hash);
+    }
+    public void listar(Connection con) throws SQLException, IllegalAccessException {
+        System.out.println("Insira o id que deseja selecionar : ");
+        int id = scanner.nextInt();
+        Object bean = this.model.select(con, id);
+        Printer.printObject(bean);
+    }
 
-    public abstract String manipularAtualizacao();
+    public String manipularAtualizacao(){
+        return campos.keySet().toArray()[MenuUtils.mostraCamposAtualizar(campos)].toString();
+    }
 }

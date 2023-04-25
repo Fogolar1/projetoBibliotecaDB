@@ -7,7 +7,7 @@ public class EnderecosBean {
     private final String logradouro;
     private final int numero;
 
-    public EnderecosBean(int id, String bairro, String cidade, String logradouro, int numero) {
+    public EnderecosBean(int id, String cidade, String bairro, String logradouro, int numero) {
         this.id = id;
         this.bairro = bairro;
         this.cidade = cidade;

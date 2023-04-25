@@ -39,7 +39,7 @@ public class EnderecosModel extends Model{
         Statement st;
         HashSet<Object>  hashList = new HashSet<>();
         st = con.createStatement();
-        String sql = "SELECT id, cidade, bairro, logradouro, numero FROM enderecos";
+        String sql = "SELECT id, cidade, bairro, logradouro, numero FROM enderecos ORDER BY id DESC";
         ResultSet result = st.executeQuery(sql);
         while(result.next()){
             hashList.add(new EnderecosBean(result.getInt(1), result.getString(2), result.getString(3),
@@ -51,7 +51,7 @@ public class EnderecosModel extends Model{
     @Override
     public Object select(Connection con, int id) throws SQLException {
         PreparedStatement st;
-        st = con.prepareStatement("SELECT id, cidade, bairro, logradouro,  numero FROM enderecos WHERE id = ?");
+        st = con.prepareStatement("SELECT id, cidade, bairro, logradouro,  numero FROM enderecos WHERE id = ? ORDER BY id DESC");
         st.setInt(1,id);
         ResultSet result = st.executeQuery();
         result.next();
