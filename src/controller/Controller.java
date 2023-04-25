@@ -81,7 +81,9 @@ public abstract class Controller {
         System.out.println("Insira o id que deseja selecionar : ");
         int id = scanner.nextInt();
         Object bean = this.model.select(con, id);
+        Printer.printHeader(bean);
         Printer.printObject(bean);
+        Printer.printLine();
     }
 
     public String manipularAtualizacao(){
